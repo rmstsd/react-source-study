@@ -15,7 +15,7 @@ const rerender = value => {
     <section className="section">
       <input onInput={updateValue} value={value} />
       <div className="div-cls">
-        <h2>h2</h2>
+        <h2>input值: {value}</h2>
       </div>
 
       <article>
