@@ -26,6 +26,8 @@ function commitWork(fiber) {
     updateDom(fiber.dom, fiber.alternate.props, fiber.props)
   } else if (fiber.effectTag === 'DELETION') {
     commitDeletion(fiber, domParent)
+
+    return // 原文章没有这一行
   }
 
   commitWork(fiber.child)
@@ -177,7 +179,7 @@ function reconcileChildren(wipFiber, elements) {
   }
 }
 
-let wipFiber = null
+let wipFiber = null // 函数组件的 fiber
 let hookIndex = null
 
 function useState(initial) {
@@ -189,11 +191,12 @@ function useState(initial) {
 
   const actions = oldHook ? oldHook.queue : []
   actions.forEach(action => {
-    hook.state = action(hook.state)
+    hook.state = typeof action === 'function' ? action(hook.state) : action
   })
 
   const setState = action => {
     hook.queue.push(action)
+
     wipRoot = {
       dom: currentRoot.dom,
       props: currentRoot.props,
