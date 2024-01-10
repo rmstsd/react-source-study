@@ -1,40 +1,12 @@
-import './index.css'
+import ReactDom from './react-dom.development'
+import React from './react.development'
 
-/** @jsx Didact.createElement */
+// ReactDom.render(<App />, document.querySelector('#root'))
 
-import Didact from './lib/render'
+const root = ReactDom.createRoot(document.querySelector('#root'))
 
-const container = document.getElementById('root')
+root.render(<App />)
 
-const updateValue = e => {
-  rerender(e.target.value)
+function App() {
+  return <div>134</div>
 }
-
-function Counter() {
-  const [state, setState] = Didact.useState(1)
-  return <h1 onClick={() => setState(state + 1)}>Count: {state}</h1>
-}
-
-const rerender = value => {
-  // const element = (
-  //   <section className="section">
-  //     <input onInput={updateValue} value={value} />
-  //     <div className="div-cls">
-  //       <h2>input值: {value}</h2>
-  //     </div>
-
-  //     <article>
-  //       <header>header</header>
-  //       <main>main</main>
-  //     </article>
-  //   </section>
-  // )
-
-  const element = <Counter />
-
-  console.log(element)
-
-  Didact.render(element, container)
-}
-
-rerender('World')
