@@ -8,8 +8,6 @@ if (
 import React from './react.development'
 import Scheduler from './scheduler.development'
 
-console.log(Scheduler)
-
 var ReactSharedInternals = React.__SECRET_INTERNALS_DO_NOT_USE_OR_YOU_WILL_BE_FIRED
 
 var suppressWarning = false
@@ -240,7 +238,7 @@ function testStringCoercion(value) {
   // To fix the problem, coerce this object or symbol value to a string before
   // passing it to React. The most reliable way is usually `String(value)`.
   //
-  // To find which value is throwing, check the browser or debugger console.
+  // To find which value is throwing, check the browser or console.
   // Before this exception was thrown, there should be `console.error` output
   // that shows the type (Symbol, Temporal.PlainDate, etc.) that caused the
   // problem and how that type was used: key, atrribute, input value prop, etc.
@@ -16534,6 +16532,7 @@ function ChildReconciler(shouldTrackSideEffects) {
       switch (newChild.$$typeof) {
         case REACT_ELEMENT_TYPE: {
           var _created = createFiberFromElement(newChild, returnFiber.mode, lanes)
+          console.log('_created.elementType', _created.elementType)
 
           _created.ref = coerceRef(returnFiber, null, newChild)
           _created.return = returnFiber
@@ -17183,6 +17182,8 @@ function ChildReconciler(shouldTrackSideEffects) {
       return created
     } else {
       var _created4 = createFiberFromElement(element, returnFiber.mode, lanes)
+
+      console.log('_created4', _created4.elementType)
 
       _created4.ref = coerceRef(returnFiber, currentFirstChild, element)
       _created4.return = returnFiber
@@ -18484,6 +18485,7 @@ function mountState(initialState) {
     lastRenderedState: initialState
   }
   hook.queue = queue
+
   var dispatch = (queue.dispatch = dispatchSetState.bind(null, currentlyRenderingFiber$1, queue))
   return [hook.memoizedState, dispatch]
 }
@@ -18981,7 +18983,7 @@ function dispatchSetState(fiber, queue, action) {
     eagerState: null,
     next: null
   }
-
+  //判断是否在 render 的时候调用了该方法。
   if (isRenderPhaseUpdate(fiber)) {
     enqueueRenderPhaseUpdate(queue, update)
   } else {
@@ -19084,7 +19086,7 @@ function entangleTransitionUpdate(root, queue, lane) {
   }
 }
 
-function markUpdateInDevTools(fiber, lane, action) {
+function markUpdateInDevTools(fiber, lane, action?) {
   {
     markStateUpdateScheduled(fiber, lane)
   }
@@ -29256,7 +29258,7 @@ var beginWork$1
 
   beginWork$1 = function (current, unitOfWork, lanes) {
     // If a component throws an error, we replay it again in a synchronously
-    // dispatched event, so that the debugger will treat it as an uncaught
+    // dispatched event, so that the will treat it as an uncaught
     // error See ReactErrorUtils for more information.
     // Before entering the begin phase, copy the work-in-progress onto a dummy
     // fiber. If beginWork throws, we'll use this to reset the state.
@@ -29983,6 +29985,7 @@ function FiberNode(tag, pendingProps, key, mode) {
 //    compatible.
 
 var createFiber = function (tag, pendingProps, key, mode) {
+  // console.log('createFiber call')
   // $FlowFixMe: the shapes are exact here but Flow doesn't like constructors
   return new FiberNode(tag, pendingProps, key, mode)
 }
@@ -30557,7 +30560,7 @@ function createFiberRoot(
   // single type, like a DynamicHostConfig that is defined by the renderer.
   identifierPrefix,
   onRecoverableError,
-  transitionCallbacks
+  transitionCallbacks?
 ) {
   var root = new FiberRootNode(containerInfo, tag, hydrate, identifierPrefix, onRecoverableError)
   // stateNode is any.
@@ -31254,7 +31257,6 @@ function ReactDOMRoot(internalRoot) {
 
 ReactDOMHydrationRoot.prototype.render = ReactDOMRoot.prototype.render = function (children) {
   var root = this._internalRoot
-
   if (root === null) {
     throw new Error('Cannot update an unmounted root.')
   }
@@ -31917,14 +31919,14 @@ var Internals = {
 }
 
 function createRoot$1(container, options?) {
-  {
-    if (!Internals.usingClientEntryPoint && !false) {
-      error(
-        'You are importing createRoot from "react-dom" which is not supported. ' +
-          'You should instead import it from "react-dom/client".'
-      )
-    }
-  }
+  // {
+  //   if (!Internals.usingClientEntryPoint && !false) {
+  //     error(
+  //       'You are importing createRoot from "react-dom" which is not supported. ' +
+  //         'You should instead import it from "react-dom/client".'
+  //     )
+  //   }
+  // }
 
   return createRoot(container, options)
 }

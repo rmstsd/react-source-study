@@ -2481,7 +2481,9 @@ function validateFragmentProps(fragment) {
     }
   }
 }
-function createElementWithValidation(type, props, children) {
+function createElementWithValidation(type, props?, children?) {
+  console.log('createElement', type)
+
   var validType = isValidElementType(type) // We warn in this case but don't throw. We expect the element creation to
   // succeed and there will likely be errors in render.
 
@@ -2886,6 +2888,14 @@ var Children = {
   only: onlyChild
 }
 
+/* global __REACT_DEVTOOLS_GLOBAL_HOOK__ */
+if (
+  typeof __REACT_DEVTOOLS_GLOBAL_HOOK__ !== 'undefined' &&
+  typeof __REACT_DEVTOOLS_GLOBAL_HOOK__.registerInternalModuleStop === 'function'
+) {
+  __REACT_DEVTOOLS_GLOBAL_HOOK__.registerInternalModuleStop(new Error())
+}
+
 export default {
   Children,
   Component,
@@ -2895,9 +2905,9 @@ export default {
   StrictMode: REACT_STRICT_MODE_TYPE,
   Suspense: REACT_SUSPENSE_TYPE,
   __SECRET_INTERNALS_DO_NOT_USE_OR_YOU_WILL_BE_FIRED: ReactSharedInternals,
+  createElement: createElement$1,
   cloneElement: cloneElement$1,
   createContext,
-  createElement: createElement$1,
   createFactory,
   createRef,
   forwardRef,
@@ -2922,12 +2932,4 @@ export default {
   useSyncExternalStore,
   useTransition,
   version: ReactVersion
-}
-
-/* global __REACT_DEVTOOLS_GLOBAL_HOOK__ */
-if (
-  typeof __REACT_DEVTOOLS_GLOBAL_HOOK__ !== 'undefined' &&
-  typeof __REACT_DEVTOOLS_GLOBAL_HOOK__.registerInternalModuleStop === 'function'
-) {
-  __REACT_DEVTOOLS_GLOBAL_HOOK__.registerInternalModuleStop(new Error())
 }
