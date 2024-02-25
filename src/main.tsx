@@ -9,38 +9,32 @@ const cc = <RR_App />
 
 root.render(cc)
 
-const divEle = (
-  <div className="main-dev" key="mm-dd">
-    main
-  </div>
-)
-
-console.log(divEle)
-
 function RR_App() {
   console.log('app render')
 
   const [count, setCount] = React.useState(12)
-  const [countss, setCountsdsd] = React.useState(66)
+  const [isPending, startTransition] = React.useTransition()
 
-  countss
-  setCountsdsd
+  const [list, setList] = React.useState([1, 2, 3])
 
   return (
     <main>
-      {divEle}
+      <div className="main-dev" key="mm-dd">
+        {'mm'} {'mm'}
+      </div>
 
-      <button
-        onClick={() => {
-          setCount(13)
-        }}
-      >
-        {count}
-      </button>
+      <footer></footer>
     </main>
   )
 }
 
-function Child() {
-  return <span>child</span>
+function Child({ text }) {
+  sleep(3)
+
+  return <span>{text}</span>
+}
+
+export function sleep(ms: number) {
+  let t = Date.now()
+  while (Date.now() - t < ms) {}
 }

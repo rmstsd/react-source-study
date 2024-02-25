@@ -355,7 +355,7 @@ function unstable_wrapCallback(callback) {
   }
 }
 
-function unstable_scheduleCallback(priorityLevel, callback, options) {
+function unstable_scheduleCallback(priorityLevel, callback, options?) {
   var currentTime = exports.unstable_now()
   var startTime
 

@@ -16532,7 +16532,6 @@ function ChildReconciler(shouldTrackSideEffects) {
       switch (newChild.$$typeof) {
         case REACT_ELEMENT_TYPE: {
           var _created = createFiberFromElement(newChild, returnFiber.mode, lanes)
-          console.log('_created.elementType', _created.elementType)
 
           _created.ref = coerceRef(returnFiber, null, newChild)
           _created.return = returnFiber
@@ -17182,8 +17181,6 @@ function ChildReconciler(shouldTrackSideEffects) {
       return created
     } else {
       var _created4 = createFiberFromElement(element, returnFiber.mode, lanes)
-
-      console.log('_created4', _created4.elementType)
 
       _created4.ref = coerceRef(returnFiber, currentFirstChild, element)
       _created4.return = returnFiber
@@ -19033,7 +19030,6 @@ function dispatchSetState(fiber, queue, action) {
     }
 
     var root = enqueueConcurrentHookUpdate(fiber, queue, update, lane)
-
     if (root !== null) {
       var eventTime = requestEventTime()
       scheduleUpdateOnFiber(root, fiber, lane, eventTime)
@@ -23357,7 +23353,7 @@ function beginWork(current, workInProgress, renderLanes) {
     case HostRoot:
       return updateHostRoot(current, workInProgress, renderLanes)
 
-    case HostComponent:
+    case HostComponent: // div main 等 html 标签
       return updateHostComponent(current, workInProgress, renderLanes)
 
     case HostText:

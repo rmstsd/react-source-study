@@ -2482,8 +2482,6 @@ function validateFragmentProps(fragment) {
   }
 }
 function createElementWithValidation(type, props?, children?) {
-  console.log('createElement', type)
-
   var validType = isValidElementType(type) // We warn in this case but don't throw. We expect the element creation to
   // succeed and there will likely be errors in render.
 
