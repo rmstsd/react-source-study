@@ -68,12 +68,28 @@ function workLoop(deadline: IdleDeadline) {
   requestIdleCallback(workLoop)
 }
 
+let deletions = []
 function commitRoot() {
+  deletions.forEach(commitDeletion)
+
   commitWork(wipRoot.child)
 
   currentRoot = wipRoot
 
   wipRoot = null
+  deletions = []
+}
+
+function commitDeletion(fiber) {
+  if (fiber.dom) {
+    let fiberParent = fiber.parent
+    while (!fiberParent.dom) {
+      fiberParent = fiberParent.parent
+    }
+    fiberParent.dom.removeChild(fiber.dom)
+  } else {
+    commitDeletion(fiber.child)
+  }
 }
 
 function commitWork(fiber) {
@@ -106,11 +122,11 @@ function createDom(fiber) {
   return fiber.type === Text_Element_type ? document.createTextNode('') : document.createElement(fiber.type)
 }
 
-function updateProps(dom: HTMLElement, nextProps, prevProps = {}) {
+function updateProps(dom: HTMLElement, nextProps, prevProps) {
   // 1. old 有, new 没有 删除
   Object.keys(prevProps).forEach(key => {
     if (key !== 'children') {
-      if (!Reflect.has(nextProps, key)) {
+      if (!(key in nextProps)) {
         dom.removeAttribute(key)
       }
     }
@@ -144,7 +160,6 @@ function reconcileChildren(fiber, children) {
 
     let newFiber
     if (isSameType) {
-      // 更新
       newFiber = {
         type: item.type,
         props: item.props,
@@ -156,7 +171,6 @@ function reconcileChildren(fiber, children) {
         alternate: oldFiber
       }
     } else {
-      // 初始化
       newFiber = {
         type: item.type,
         props: item.props,
@@ -165,6 +179,10 @@ function reconcileChildren(fiber, children) {
         sibling: null,
         dom: null,
         effectTag: Placement
+      }
+
+      if (oldFiber) {
+        deletions.push(oldFiber)
       }
     }
 
@@ -233,4 +251,5 @@ const React = {
   render,
   update
 }
+
 export default React
