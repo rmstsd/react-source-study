@@ -1,3 +1,6 @@
+// @ts-ignore
+// @ts-nocheck
+
 /* global __REACT_DEVTOOLS_GLOBAL_HOOK__ */
 if (
   typeof __REACT_DEVTOOLS_GLOBAL_HOOK__ !== 'undefined' &&

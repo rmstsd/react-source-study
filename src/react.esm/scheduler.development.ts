@@ -1,3 +1,6 @@
+// @ts-ignore
+// @ts-nocheck
+
 /**
  * @license React
  * scheduler.development.js
