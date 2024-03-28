@@ -25,10 +25,15 @@ function Counter({ count }) {
 let domAttr = { id: 'aa' } as any
 let count = 1
 
-const Foo = () => <div>foo</div>
 const App = () => {
-  const foo = <Foo />
-  const bar = <p>bar</p>
+  const foo = (
+    <div>
+      foo
+      <div>child 1</div>
+      <div>child 2</div>
+    </div>
+  )
+  const bar = <div>bar</div>
 
   const click = () => {
     count++
