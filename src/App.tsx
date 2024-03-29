@@ -1,35 +1,63 @@
 import React from './core/React'
 
-let showBar = false
+let countFoo = 1
+function Foo() {
+  console.log('Foo render')
 
-function Counter() {
-  const bar = <div>bar</div>
-
-  const click = () => {
-    showBar = !showBar
-
-    React.update()
-  }
+  const up = React.update()
 
   return (
-    <div>
-      <button onClick={click}>up</button>
+    <button
+      onClick={() => {
+        countFoo++
 
-      {showBar && bar}
-
-      <div>222</div>
-
-    </div>
+        up()
+      }}
+    >
+      foo {countFoo}
+    </button>
   )
 }
 
-const App = () => {
+let countBar = 1
+function Bar() {
+  console.log('Bar render')
+
+  const up = React.update()
+
+  return (
+    <button
+      onClick={() => {
+        countBar++
+        up()
+      }}
+    >
+      bar {countBar}
+    </button>
+  )
+}
+
+let countApp = 1
+function App() {
+  console.log('App render')
+
+  const up = React.update()
+
   return (
     <header id="app">
+      <button
+        onClick={() => {
+          countApp++
+          up()
+        }}
+      >
+        {countApp}
+      </button>
+
       <hr />
 
-      <Counter />
-
+      <Foo />
+      <Bar />
     </header>
   )
 }

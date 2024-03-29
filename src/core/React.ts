@@ -25,6 +25,7 @@ function createElement(type, props, ...children) {
 // work in progress
 let wipRoot = null
 let currentRoot = null
+let wipFiber = null
 function render(el, container) {
   wipRoot = {
     props: {
@@ -39,15 +40,24 @@ function render(el, container) {
 }
 
 function update() {
-  wipRoot = {
-    dom: currentRoot.dom,
-    props: currentRoot.props,
-    alternate: currentRoot
+  let currentFiber = wipFiber
+
+  return () => {
+    wipRoot = {
+      ...currentFiber,
+      alternate: currentFiber
+    }
+
+    // wipRoot = {
+    //   dom: currentRoot.dom,
+    //   props: currentRoot.props,
+    //   alternate: currentRoot
+    // }
+
+    nextWorkOfUnit = wipRoot
+
+    console.log('fiber 树', wipRoot)
   }
-
-  nextWorkOfUnit = wipRoot
-
-  console.log('fiber 树', wipRoot)
 }
 
 requestIdleCallback(workLoop)
@@ -57,6 +67,10 @@ function workLoop(deadline: IdleDeadline) {
 
   while (!shouldYield && nextWorkOfUnit) {
     nextWorkOfUnit = performWorkOfUnit(nextWorkOfUnit)
+
+    if (wipRoot?.sibling?.type === nextWorkOfUnit?.type) {
+      nextWorkOfUnit = null
+    }
 
     shouldYield = deadline.timeRemaining() < 1
   }
@@ -210,6 +224,8 @@ function reconcileChildren(fiber, children) {
 }
 
 function updateFunctionComponent(fiber) {
+  wipFiber = fiber
+
   const children = [fiber.type(fiber.props)]
   reconcileChildren(fiber, children)
 }
@@ -239,10 +255,6 @@ function performWorkOfUnit(fiber) {
   if (fiber.child) {
     return fiber.child
   }
-
-  // if (fiber.sibling) {
-  //   return fiber.sibling
-  // }
 
   let nextFiber = fiber
 
