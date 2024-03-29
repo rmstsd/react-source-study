@@ -9,7 +9,7 @@ function Foo() {
     <div>
       <button
         onClick={() => {
-          setCount(count + 1)
+          setCount(1)
         }}
       >
         count {count}

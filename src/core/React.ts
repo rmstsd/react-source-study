@@ -285,6 +285,11 @@ function useState(initial) {
   currentFiber.stateHooks = stateHooks
 
   function setState(action) {
+    const eagerState = typeof action === 'function' ? action(stateHook.state) : action
+    if (eagerState === stateHook.state) {
+      return
+    }
+
     stateHook.queue.push(typeof action === 'function' ? action : () => action)
 
     wipRoot = {
