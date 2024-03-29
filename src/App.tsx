@@ -1,21 +1,28 @@
 import React from './core/React'
 
-let countFoo = 1
 function Foo() {
   console.log('Foo render')
 
-  const up = React.update()
+  const [count, setCount] = React.useState(1)
+  const [count2, setCount2] = React.useState(10)
 
   return (
-    <button
-      onClick={() => {
-        countFoo++
-
-        up()
-      }}
-    >
-      foo {countFoo}
-    </button>
+    <div>
+      <button
+        onClick={() => {
+          setCount(v => v + 1)
+        }}
+      >
+        count {count}
+      </button>
+      <button
+        onClick={() => {
+          setCount2(v => v + 1)
+        }}
+      >
+        count2 {count2}
+      </button>
+    </div>
   )
 }
 
@@ -57,7 +64,7 @@ function App() {
       <hr />
 
       <Foo />
-      <Bar />
+      {/* <Bar /> */}
     </header>
   )
 }
