@@ -7,15 +7,27 @@ function Foo() {
 
   React.useEffect(() => {
     console.log('first')
+
+    return () => {
+      console.log('un mount')
+    }
   }, [])
 
-  // React.useEffect(() => {
-  //   console.log('count update 1', count)
-  // }, [count])
+  React.useEffect(() => {
+    console.log('count update', count)
 
-  // React.useEffect(() => {
-  //   console.log('count update 2', count)
-  // }, [count])
+    return () => {
+      console.log('cleanup', count)
+    }
+  }, [count])
+
+  React.useEffect(() => {
+    console.log('count update', count)
+
+    return () => {
+      console.log('cleanup', count)
+    }
+  }, [count])
 
   return (
     <div>
@@ -33,15 +45,13 @@ function Foo() {
 function App() {
   console.log('App render')
 
-  React.useEffect(() => {
-    console.log('app first')
-  }, [])
+  const [bool, setBool] = React.useState(true)
 
   return (
     <header id="app">
-      <hr />
+      <button onClick={() => setBool(false)}>set false</button>
 
-      <Foo />
+      {bool && <Foo />}
     </header>
   )
 }
