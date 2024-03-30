@@ -81,11 +81,42 @@ function commitRoot() {
   deletions.forEach(commitDeletion)
 
   commitWork(wipRoot.child)
+  commitEffectHooks()
 
   currentRoot = wipRoot
 
   wipRoot = null
   deletions = []
+}
+
+function commitEffectHooks() {
+  function run(fiber) {
+    if (!fiber) {
+      return
+    }
+
+    if (!fiber.alternate) {
+      // 初始化
+      fiber.effectHooks?.forEach(hook => {
+        hook.callback()
+      })
+    } else {
+      fiber.effectHooks?.forEach((newHook, index) => {
+        const needUpdate = fiber.alternate.effectHooks[index]?.deps.some((oldDep, depIndex) => {
+          return oldDep !== newHook.deps[depIndex]
+        })
+
+        if (needUpdate) {
+          newHook.callback()
+        }
+      })
+    }
+
+    run(fiber.child)
+    run(fiber.sibling)
+  }
+
+  run(wipRoot)
 }
 
 function commitDeletion(fiber) {
@@ -220,6 +251,9 @@ function reconcileChildren(fiber, children) {
 function updateFunctionComponent(fiber) {
   stateHooks = []
   stateHookIndex = 0
+
+  effectHooks = []
+
   wipFiber = fiber
 
   const children = [fiber.type(fiber.props)]
@@ -303,11 +337,24 @@ function useState(initial) {
   return [stateHook.state, setState] as const
 }
 
+let effectHooks
+function useEffect(callback, deps) {
+  const effectHook = {
+    callback,
+    deps
+  }
+
+  effectHooks.push(effectHook)
+
+  wipFiber.effectHooks = effectHooks
+}
+
 const React = {
   createElement,
   render,
   update,
-  useState
+  useState,
+  useEffect
 }
 
 export default React

@@ -5,11 +5,23 @@ function Foo() {
 
   const [count, setCount] = React.useState(1)
 
+  React.useEffect(() => {
+    console.log('first')
+  }, [])
+
+  // React.useEffect(() => {
+  //   console.log('count update 1', count)
+  // }, [count])
+
+  // React.useEffect(() => {
+  //   console.log('count update 2', count)
+  // }, [count])
+
   return (
     <div>
       <button
         onClick={() => {
-          setCount(1)
+          setCount(count + 1)
         }}
       >
         count {count}
@@ -20,6 +32,10 @@ function Foo() {
 
 function App() {
   console.log('App render')
+
+  React.useEffect(() => {
+    console.log('app first')
+  }, [])
 
   return (
     <header id="app">
