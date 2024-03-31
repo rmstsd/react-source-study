@@ -21,13 +21,13 @@ function Foo() {
     }
   }, [count])
 
-  React.useEffect(() => {
-    console.log('count update', count)
+  // React.useEffect(() => {
+  //   console.log('count update', count)
 
-    return () => {
-      console.log('cleanup', count)
-    }
-  }, [count])
+  //   return () => {
+  //     console.log('cleanup', count)
+  //   }
+  // }, [count])
 
   return (
     <div>
@@ -49,11 +49,20 @@ function App() {
 
   return (
     <header id="app">
-      <button onClick={() => setBool(false)}>set false</button>
+      <button onClick={() => setBool(!bool)}>set bool</button>
 
       {bool && <Foo />}
+      {/* <S /> */}
     </header>
   )
+}
+
+function S() {
+  React.useEffect(() => {
+    console.log('ss')
+  }, [])
+
+  return <div>s</div>
 }
 
 export default App

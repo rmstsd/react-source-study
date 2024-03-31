@@ -1,26 +1,4 @@
-export const Text_Element_type = 'Text_Element_type'
-const Placement = 'Placement'
-const Update = 'Update'
-
-function createTextELement(textContent) {
-  return {
-    type: Text_Element_type,
-    props: { textContent, children: [] }
-  }
-}
-
-function createElement(type, props, ...children) {
-  return {
-    type,
-    props: {
-      ...props,
-      children: children.map(item => {
-        const isTextNode = typeof item === 'string' || typeof item === 'number'
-        return isTextNode ? createTextELement(item) : item
-      })
-    }
-  }
-}
+import { Placement, Update, createDom, createElement } from './createElement'
 
 // work in progress
 let wipRoot = null
@@ -172,10 +150,6 @@ function commitWork(fiber) {
 }
 
 let nextWorkOfUnit = null
-
-function createDom(fiber) {
-  return fiber.type === Text_Element_type ? document.createTextNode('') : document.createElement(fiber.type)
-}
 
 function updateProps(dom: HTMLElement, nextProps, prevProps) {
   // 1. old 有, new 没有 删除
@@ -362,12 +336,6 @@ function useEffect(callback, deps) {
   wipFiber.effectHooks = effectHooks
 }
 
-const React = {
-  createElement,
-  render,
-  update,
-  useState,
-  useEffect
-}
+const React = { createElement, render, useState, useEffect }
 
 export default React
