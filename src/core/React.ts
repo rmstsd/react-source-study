@@ -49,6 +49,10 @@ function workLoop(deadline: IdleDeadline) {
 
   if (!nextWorkOfUnit && wipRoot) {
     commitRoot()
+
+    if (nextWorkOfUnit) {
+      wipRoot = currentRoot
+    }
   }
 
   requestIdleCallback(workLoop)
@@ -140,7 +144,7 @@ function commitWork(fiber) {
     if (fiber.dom) {
       fiberParent.dom.append(fiber.dom)
     }
-  } else if (fiber.effectTag === Update) {
+  } else if (fiber.effectTag === Update && fiber.dom) {
     // 更新
     updateProps(fiber.dom, fiber.props, fiber.alternate?.props)
   }
@@ -289,12 +293,12 @@ function performWorkOfUnit(fiber) {
 
 let stateHooks
 let stateHookIndex = 0
-function useState(initial) {
+function useState<T>(initial: T) {
   const currentFiber = wipFiber
 
   const oldHook = currentFiber.alternate?.stateHooks[stateHookIndex]
   const stateHook = {
-    state: oldHook ? oldHook.state : initial,
+    state: oldHook ? (oldHook.state as T) : initial,
     queue: oldHook ? oldHook.queue : []
   }
 
@@ -308,8 +312,8 @@ function useState(initial) {
   stateHooks.push(stateHook)
   currentFiber.stateHooks = stateHooks
 
-  function setState(action) {
-    const eagerState = typeof action === 'function' ? action(stateHook.state) : action
+  function setState(action: T | ((state: T) => T)) {
+    const eagerState = typeof action === 'function' ? (action as any)(stateHook.state) : action
     if (eagerState === stateHook.state) {
       return
     }

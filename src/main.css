@@ -1,0 +1,11 @@
+span {
+  display: inline-block;
+  margin-right: 10px;
+}
+
+.active {
+}
+
+.done {
+  text-decoration: line-through;
+}
